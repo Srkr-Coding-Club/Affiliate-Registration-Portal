@@ -10,7 +10,7 @@ const app = express();
 
 app.use(cors(
     {
-        origin: 'https://affiliate-registration-portal.vercel.app',
+        origin: 'https://registrationportal.srkrcodingclub.in',
         credentials: true
     }
 ));
