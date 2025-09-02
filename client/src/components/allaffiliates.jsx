@@ -133,7 +133,6 @@ const AllAffiliates = () => {
 
   return (
     <div className="p-4 max-w-7xl mx-auto">
-      {/* Header */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -143,7 +142,6 @@ const AllAffiliates = () => {
             <p className="text-gray-600">Manage and view all registered affiliates</p>
           </div>
 
-          {/* Export Button */}
           <button
             onClick={exportToExcel}
             disabled={isExporting || affiliates.length === 0}
@@ -155,7 +153,6 @@ const AllAffiliates = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="mb-6">
         <div className="relative max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -176,15 +173,12 @@ const AllAffiliates = () => {
         )}
       </div>
 
-      {/* Affiliates Grid - 16:9 Cards */}
       <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
         {filteredAffiliates.map((affiliate, index) => (
           <div key={affiliate._id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:border-orange-300 overflow-hidden">
-            {/* 16:9 Aspect Ratio Container */}
             <div className="aspect-video relative">
               <div className="absolute inset-0 p-4 flex flex-col justify-between">
 
-                {/* Top Section - Header */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center min-w-0 flex-1">
                     <div className="bg-gradient-to-r from-orange-100 to-orange-200 rounded-full p-2 mr-3 shadow-sm flex-shrink-0">
@@ -201,7 +195,6 @@ const AllAffiliates = () => {
                   </div>
                 </div>
 
-                {/* Middle Section - Key Details */}
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="bg-gray-50/80 p-2 rounded">
                     <div className="flex items-center mb-1">

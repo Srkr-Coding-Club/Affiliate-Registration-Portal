@@ -41,12 +41,10 @@ const App = () => {
     { id: 'affiliates', label: 'All Affiliates', icon: Users }
   ];
 
-  // ✅ If not logged in, show login page
   if (!isLoggedIn) {
     return <AdminLogin onLoginSuccess={() => setIsLoggedIn(true)} />;
   }
 
-  // ✅ If logged in, show full app layout
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Menu Button */}

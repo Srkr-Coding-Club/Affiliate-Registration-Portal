@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Check, X } from 'lucide-react';
 
 const SuccessPopup = ({ isOpen, onClose }) => {
-  // Close on Escape key press
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === 'Escape') {

@@ -5,8 +5,8 @@ const Sidebar = ({ menuItems, activeTab, setActiveTab, sidebarOpen, setSidebarOp
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/logout");
-      localStorage.removeItem("token"); // clear saved token
-      onLogout(); // notify parent (App.jsx)
+      localStorage.removeItem("token");
+      onLogout(); 
     } catch (error) {
       console.error("Logout failed:", error);
     }

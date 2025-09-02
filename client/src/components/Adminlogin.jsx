@@ -17,12 +17,11 @@ const AdminLogin = ({ onLoginSuccess }) => {
       const res = await axiosInstance.post("/login", { email, password });
       console.log("Login success:", res.data);
 
-      // store token if returned
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
       }
 
-      onLoginSuccess(); // notify App.jsx
+      onLoginSuccess(); 
     } catch (err) {
       setError("Invalid credentials ❌");
       console.error(err);
@@ -37,7 +36,6 @@ const AdminLogin = ({ onLoginSuccess }) => {
       >
         <h2 className="text-xl font-bold mb-6 text-center">Login to Access</h2>
 
-        {/* Email Input */}
         <input
           type="email"
           placeholder="Email"
@@ -47,7 +45,6 @@ const AdminLogin = ({ onLoginSuccess }) => {
           className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        {/* Password Input with Eye Toggle */}
         <div className="relative mb-4">
           <input
             type={showPassword ? "text" : "password"}
@@ -67,7 +64,6 @@ const AdminLogin = ({ onLoginSuccess }) => {
           </button>
         </div>
 
-        {/* Login Button */}
         <button
           type="submit"
           className="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold py-2 rounded-lg hover:from-orange-500 hover:to-orange-600 transition"

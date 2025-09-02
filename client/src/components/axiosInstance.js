@@ -2,11 +2,11 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // Change to your backend server
+  baseURL: 'https://affiliate-registration-portal.onrender.com', 
   headers: {
     'Content-Type': 'application/json'
   },
-  withCredentials: true // Enable sending cookies with requests
+  withCredentials: true 
 });
 
 export default axiosInstance;
