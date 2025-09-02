@@ -64,6 +64,7 @@ const AllAffiliates = () => {
         'Phone Number': affiliate.phoneNumber,
         'Branch': affiliate.branch,
         'Club ID': affiliate.clubId,
+        'Member': affiliate.member,
         'Registration Date': formatDate(affiliate.createdAt),
         'Status': 'Active'
       }));
@@ -80,6 +81,7 @@ const AllAffiliates = () => {
         { wch: 15 },  // Phone Number
         { wch: 15 },  // Branch
         { wch: 12 },  // Club ID
+        { wch: 20 },  // Member
         { wch: 15 },  // Registration Date
         { wch: 10 }   // Status
       ];
@@ -223,14 +225,20 @@ const AllAffiliates = () => {
                       {affiliate.clubId}
                     </p>
                   </div>
-                  <div className="p-2 rounded relative">
-                    <div className="absolute bottom-2 right-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        🟢 Active
-                      </span>
+                  <div className="bg-gray-50/80 p-2 rounded">
+                    <div className="flex items-center mb-1">
+                      <Phone className="h-3 w-3 text-gray-400 mr-1" />
+                      <span className="font-medium text-gray-700">Member</span>
                     </div>
+                    <p className="text-gray-600 truncate">{affiliate.member}</p>
                   </div>
-
+                </div>
+                <div className="p-2 rounded relative mt-5">
+                  <div className="absolute bottom-1 right-2">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      🟢 Active
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

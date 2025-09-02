@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Users } from 'lucide-react';
 import Sidebar from './components/sidebar';
 import RegistrationForm from './components/registrationform';
 import AllAffiliates from './components/allaffiliates';
 import SuccessPopup from './components/successpopup';
+import AdminLogin from './components/Adminlogin';
+import axiosInstance from './components/axiosInstance';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('form');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const res = await axiosInstance.get("/check-auth");
+      if (res.data.isLoggedIn) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const handleFormSubmit = (data) => {
     setSubmittedData(data);
@@ -26,6 +41,12 @@ const App = () => {
     { id: 'affiliates', label: 'All Affiliates', icon: Users }
   ];
 
+  // ✅ If not logged in, show login page
+  if (!isLoggedIn) {
+    return <AdminLogin onLoginSuccess={() => setIsLoggedIn(true)} />;
+  }
+
+  // ✅ If logged in, show full app layout
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Menu Button */}
@@ -47,6 +68,10 @@ const App = () => {
         setActiveTab={setActiveTab}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        onLogout={() => {
+          localStorage.removeItem("token"); // clear token
+          setIsLoggedIn(false);
+        }}
       />
 
       {/* Mobile Overlay */}

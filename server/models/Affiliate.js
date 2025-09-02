@@ -22,6 +22,11 @@ const affiliateSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    member : {
+        type: String,
+        required: true,
+        trim: true
+    },
     clubId: {
         type: String,
         required: true,

@@ -9,6 +9,7 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
         email: '',
         branch: '',
         phoneNumber: '',
+        member: '',
         clubId: ''
     });
 
@@ -16,6 +17,7 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingClubId, setIsLoadingClubId] = useState(true);
     const [clubIdError, setClubIdError] = useState('');
+    const [isOtherMember, setIsOtherMember] = useState(false);
 
     // Fetch last club ID and set next one
     const fetchAndSetClubId = async () => {
@@ -81,13 +83,30 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
             newErrors.clubId = 'Club ID is required';
         }
 
+        // Member validation
+        if (!formData.member.trim()) {
+            newErrors.member = 'Club Member is required';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (name === "member") {
+            if (value === "Other") {
+                setIsOtherMember(true);
+                setFormData(prev => ({ ...prev, member: "" }));
+            } else {
+                setIsOtherMember(false);
+                setFormData(prev => ({ ...prev, member: value }));
+            }
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
@@ -107,9 +126,11 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
                 email: '',
                 branch: '',
                 phoneNumber: '',
+                member: '',
                 clubId: ''
             });
             setErrors({});
+            setIsOtherMember(false);
             await fetchAndSetClubId();
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -220,6 +241,55 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
                         {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">⚠️ {errors.phoneNumber}</p>}
                     </div>
 
+                    {/* Club Member Dropdown + Other */}
+                    <div>
+                        <label htmlFor="member" className="block text-sm font-medium text-gray-700 mb-1">
+                            Club Member *
+                        </label>
+                        <select
+                            id="member"
+                            name="member"
+                            value={isOtherMember ? "Other" : formData.member}
+                            onChange={handleInputChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${errors.member ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                }`}
+                            disabled={isSubmitting}
+                        >
+                            <option value="">-- Select Club Member --</option>
+                            <option value="A.Vijay Babu">A.Vijay Babu</option>
+                            <option value="N.Yemima">N.Yemima</option>
+                            <option value="P.Sreedevi">P.Sreedevi</option>
+                            <option value="V.Ashok babu">V.Ashok babu</option>
+                            <option value="G.Tharunee">G.Tharunee</option>
+                            <option value="M.Narendra reddy">M.Narendra reddy</option>
+                            <option value="J.Pavan Kumar">J.Pavan Kumar</option>
+                            <option value="P.Prasanna">P.Prasanna</option>
+                            <option value="A.Asha">A.Asha</option>
+                            <option value="P.Tarun">P.Tarun</option>
+                            <option value="P.Adithya">P.Adithya</option>
+                            <option value="A.Rajitha">A.Rajitha</option>
+                            <option value="V.Siddhardha">V.Siddhardha</option>
+                            <option value="S.Lakshmana Swamy">S.Lakshmana Swamy</option>
+                            <option value="T.Bashitha">T.Bashitha</option>
+                            <option value="D.Hepsiba">D.Hepsiba</option>
+                            <option value="Harshith Raju">Harshith Raju</option>
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {isOtherMember && (
+                            <input
+                                type="text"
+                                placeholder="Enter member name"
+                                value={formData.member}
+                                onChange={(e) => setFormData(prev => ({ ...prev, member: e.target.value }))}
+                                className="mt-2 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300"
+                                disabled={isSubmitting}
+                            />
+                        )}
+
+                        {errors.member && <p className="text-red-500 text-sm mt-1">⚠️ {errors.member}</p>}
+                    </div>
+
                     {/* Club ID */}
                     <div>
                         <label htmlFor="clubId" className="block text-sm font-medium text-gray-700 mb-1">
@@ -258,20 +328,21 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
                     <button
                         type="submit" disabled={isSubmitting || isLoadingClubId || clubIdError}
                         className="w-full bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-300 hover:to-orange-400 disabled:from-orange-400 disabled:to-orange-500 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-md transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:transform-none cursor-pointer disabled:cursor-not-allowed" >
-                        { isSubmitting ? (
+                        {isSubmitting ? (
                             <>
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2">
-                                </div>
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                                 Submitting...
-                            </>) : isLoadingClubId ?
-                            (<>
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2">
-                                </div>
+                            </>
+                        ) : isLoadingClubId ? (
+                            <>
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                                 Generating Club ID...
-                            </>) :
-                            (<>
+                            </>
+                        ) : (
+                            <>
                                 <span className="mr-2">📝</span> Register Affiliate
-                            </>)}
+                            </>
+                        )}
                     </button>
                 </div>
             </form>

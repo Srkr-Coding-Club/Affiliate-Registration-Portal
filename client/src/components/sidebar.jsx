@@ -1,6 +1,17 @@
 import React from 'react';
+import axiosInstance from './axiosInstance.js'; 
 
-const Sidebar = ({ menuItems, activeTab, setActiveTab, sidebarOpen, setSidebarOpen }) => {
+const Sidebar = ({ menuItems, activeTab, setActiveTab, sidebarOpen, setSidebarOpen, onLogout }) => {
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/logout");
+      localStorage.removeItem("token"); // clear saved token
+      onLogout(); // notify parent (App.jsx)
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className={`
       fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out
@@ -36,6 +47,16 @@ const Sidebar = ({ menuItems, activeTab, setActiveTab, sidebarOpen, setSidebarOp
           );
         })}
       </nav>
+
+      {/* Logout Button */}
+      <div className="px-6 py-4">
+        <button
+          onClick={handleLogout}
+          className="w-full bg-gradient-to-r from-orange-400 to-orange-500  text-white font-bold py-2 rounded-lg hover:bg-orange-600 transition"
+        >
+          Logout
+        </button>
+      </div>
 
       {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
