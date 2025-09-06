@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Search, Calendar, Phone, Mail, Building, Download } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import axiosInstance from './axiosInstance'; // <-- your axios instance
+import axiosInstance from './axiosInstance';
+import UpdateAffiliateForm from './Updateaffiliate';
 
 const AllAffiliates = () => {
   const [affiliates, setAffiliates] = useState([]);
@@ -9,22 +10,24 @@ const AllAffiliates = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isExporting, setIsExporting] = useState(false);
+  const [selectedAffiliateId, setSelectedAffiliateId] = useState(null);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
   // Fetch affiliates from API
+  const fetchAffiliates = async () => {
+    try {
+      const res = await axiosInstance.get('/allaffiliates');
+      // Sort affiliates in descending order by creation date
+      const sortedAffiliates = res.data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setAffiliates(sortedAffiliates);
+      setFilteredAffiliates(sortedAffiliates);
+    } catch (error) {
+      console.error('Error fetching affiliates:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchAffiliates = async () => {
-      try {
-        const res = await axiosInstance.get('/allaffiliates');
-        // Sort affiliates in descending order by creation date
-        const sortedAffiliates = res.data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setAffiliates(sortedAffiliates);
-        setFilteredAffiliates(sortedAffiliates);
-      } catch (error) {
-        console.error('Error fetching affiliates:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchAffiliates();
   }, []);
 
@@ -132,7 +135,7 @@ const AllAffiliates = () => {
   }
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
+    <div className="p-4 max-w-7xl mx-auto ">
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -227,8 +230,17 @@ const AllAffiliates = () => {
                   </div>
                 </div>
                 <div className="p-2 rounded relative mt-5">
-                  <div className="absolute bottom-1 right-2">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <div className="flex flex-row gap-2 absolute bottom-2 right-2">
+                    <button
+                      onClick={() => {
+                        setSelectedAffiliateId(affiliate._id);
+                        setIsUpdateOpen(true);
+                      }}
+                      className='bg-orange-400 rounded-sm w-fit px-1 text-white cursor-pointer'
+                    >
+                      📝 Edit
+                    </button>
+                    <span className="inline-flex items-center px-2 py-1 rounded-sm text-xs font-medium bg-green-100 text-green-800">
                       🟢 Active
                     </span>
                   </div>
@@ -257,6 +269,12 @@ const AllAffiliates = () => {
           </button>
         </div>
       )}
+      <UpdateAffiliateForm
+        affiliateId={selectedAffiliateId}
+        isOpen={isUpdateOpen}
+        onClose={() => setIsUpdateOpen(false)}
+        onUpdate={fetchAffiliates}
+      />
     </div>
   );
 };

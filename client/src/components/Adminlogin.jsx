@@ -15,7 +15,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
 
     try {
       const res = await axiosInstance.post("/login", { email, password });
-      console.log("Login success:", res.data);
+      // console.log("Login success:", res.data);
 
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);

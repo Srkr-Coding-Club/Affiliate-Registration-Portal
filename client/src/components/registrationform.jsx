@@ -301,11 +301,10 @@ const RegistrationForm = ({ onSubmitSuccess }) => {
                                 id="clubId"
                                 name="clubId"
                                 value={formData.clubId}
-                                readOnly
-                                className={`flex-1 px-3 py-2 border rounded-md bg-gray-50 cursor-not-allowed ${clubIdError ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                onChange={handleInputChange} 
+                                className={`flex-1 px-3 py-2 border rounded-md bg-gray-50  ${clubIdError ? 'border-red-500 bg-red-50' : 'border-gray-300'
                                     }`}
                                 placeholder={isLoadingClubId ? "Generating Club ID..." : "Club ID will be generated automatically"}
-                                disabled
                             />
                             <button
                                 type="button"

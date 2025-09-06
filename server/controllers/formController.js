@@ -4,7 +4,7 @@ import sendMail from "../utils/sendEmail.js"
 
 export const formController = async (req, res) => {
     const formData = req.body;
-    console.log(formData);
+    // console.log(formData);
     try {
         const existingAffiliate = await Affiliate.findOne({
             $or: [
@@ -66,11 +66,11 @@ export const getLastClubId = async (req, res) => {
             nextClubId = '25SCC001';
         } else {
             const lastClubId = lastAffiliate.clubId;
-            
+
             // Extract the numeric part (last 3 digits)
             const numericPart = parseInt(lastClubId.slice(-3));
             const nextNumber = numericPart + 1;
-            
+
             // Check if we've reached the maximum
             if (nextNumber > 999) {
                 return res.status(400).json({
@@ -78,7 +78,7 @@ export const getLastClubId = async (req, res) => {
                     details: "Please contact administrator"
                 });
             }
-            
+
             // Format with leading zeros
             const formattedNumber = nextNumber.toString().padStart(3, '0');
             nextClubId = `25SCC${formattedNumber}`;
@@ -92,6 +92,49 @@ export const getLastClubId = async (req, res) => {
         res.status(500).json({
             error: "Error generating next club ID",
             details: error.message
+        });
+    }
+};
+
+
+export const getaffilite = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await Affiliate.findById(id);
+        res.status(200).json({
+            message: "Affiliate Data Received Succesfully",
+            data: { user }
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: "Error generating next club ID",
+            details: error.message
+        });
+    }
+}
+
+export const updateAffiliate = async (req, res) => {
+    try {
+        const { _id, ...updateData } = req.body;
+
+        const updatedUser = await Affiliate.findByIdAndUpdate(
+            _id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: "Affiliate not found" });
+        }
+        await sendMail(updatedUser);
+        res.status(200).json({
+            message: "Affiliate updated successfully",
+            data: updatedUser,
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: "Error updating affiliate",
+            details: error.message,
         });
     }
 };
