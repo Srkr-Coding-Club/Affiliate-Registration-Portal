@@ -23,7 +23,7 @@ export const formController = async (req, res) => {
         await newAffiliate.save();
 
         // Send confirmation email
-        await sendMail(formData);
+        // await sendMail(formData);
 
         res.status(201).json({
             message: "Affiliate registered successfully",
@@ -126,7 +126,7 @@ export const updateAffiliate = async (req, res) => {
         if (!updatedUser) {
             return res.status(404).json({ error: "Affiliate not found" });
         }
-        await sendMail(updatedUser);
+        // await sendMail(updatedUser);
         res.status(200).json({
             message: "Affiliate updated successfully",
             data: updatedUser,
